@@ -9,9 +9,6 @@ langchain-openai==0.3.24
 langchain-community==0.3.26
 gunicorn==21.2.0
 pinecone-client==3.2.2
-
-
-
-
-
+transformers==4.37.2
+tokenizers==0.15.2
 
