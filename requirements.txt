@@ -8,9 +8,4 @@ langchain-openai==0.3.24
 langchain-community==0.3.26
 gunicorn==21.2.0
 pinecone-client==3.2.2
-'''
-transformers==4.37.2
-numpy==1.26.3
-tqdm==4.66.2
-requests==2.31.0
-'''
+
