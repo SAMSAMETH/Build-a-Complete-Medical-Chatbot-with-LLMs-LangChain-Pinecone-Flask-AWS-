@@ -24,8 +24,16 @@ assert PINECONE_API_KEY, "Missing Pinecone API Key"
 from pinecone import Pinecone
 pc = Pinecone(api_key=PINECONE_API_KEY)  # global initialization
 
-# Embeddings
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-MiniLM-L3-v2")
+# Use this instead for lowest memory usage
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2",
+    model_kwargs={'device': 'cpu'},
+    encode_kwargs={
+        'normalize_embeddings': True,
+        'batch_size': 4,
+        'show_progress_bar': False  # Reduces memory overhead
+    }
+)
 
 # Connect to existing Pinecone index
 index_name = "medical-chatbot"
