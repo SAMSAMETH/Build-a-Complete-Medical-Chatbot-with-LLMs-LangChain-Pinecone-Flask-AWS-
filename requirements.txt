@@ -1,7 +1,9 @@
-# Core Python tools
+# Core tools
 pip==25.2
 setuptools>=70.0
 wheel>=0.44
+
+# Web framework
 flask==3.1.1
 gunicorn==21.2.0
 python-dotenv==1.1.0
@@ -10,17 +12,17 @@ python-dotenv==1.1.0
 langchain==0.3.26
 langchain-community==0.3.26
 langchain-pinecone==0.2.8
-langchain-huggingface==0.1.2  # HuggingFaceEmbeddings
+langchain-huggingface==0.1.2
 
 # Vector DB
 pinecone-client==3.2.2
 
-# Embeddings + Transformers (precompiled wheels to avoid Rust)
-sentence-transformers==2.6.1
-transformers==4.37.2
-tokenizers==0.19.1
-huggingface-hub==0.23.1
+# Embeddings + Transformers (pre-built wheels, avoid Rust compilation)
+sentence-transformers>=2.6.0
+transformers>=4.37.2
+tokenizers>=0.19.1
+huggingface-hub>=0.23.0
 
-# PDF parsing (if needed)
+# PDF parsing
 pypdf==5.6.1
 scikit-learn==1.5.2
