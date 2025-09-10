@@ -14,7 +14,7 @@ langchain-pinecone==0.2.8
 langchain-huggingface==0.1.2
 
 # Vector DB
-pinecone-client==3.2.2
+#pinecone-client==3.2.2
 
 # Embeddings + Transformers (pre-built wheels, avoid Rust compilation)
 sentence-transformers>=2.6.0
