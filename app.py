@@ -1,24 +1,28 @@
 
 from flask import Flask, render_template, request
-from pinecone import Pinecone
-from langchain_pinecone import PineconeVectorStore
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_community.llms import Ollama
+from dotenv import load_dotenv
+import os
+
+# LangChain imports
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
-from dotenv import load_dotenv
-import os
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_pinecone import PineconeVectorStore
+
+# Ollama LLM
+from langchain_community.llms.ollama import Ollama
 
 # Initialize Flask app
 app = Flask(__name__)
 load_dotenv()
 
+# Pinecone initialization
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 assert PINECONE_API_KEY, "Missing Pinecone API Key"
 
-# Init Pinecone client
-pc = Pinecone(api_key=PINECONE_API_KEY)
+from pinecone import Pinecone
+pc = Pinecone(api_key=PINECONE_API_KEY)  # global initialization
 
 # Embeddings
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-MiniLM-L3-v2")
@@ -36,7 +40,7 @@ except Exception as e:
 # Retriever
 retriever = docsearch.as_retriever(search_type="similarity", search_kwargs={"k": 3})
 
-# LLM (Ollama)
+# Ollama LLM
 chatModel = Ollama(model="qwen2:0.5b", temperature=0.7)
 system_prompt = "You are a helpful and knowledgeable medical assistant."
 
@@ -51,7 +55,7 @@ prompt = ChatPromptTemplate.from_messages(
 question_answer_chain = create_stuff_documents_chain(chatModel, prompt)
 rag_chain = create_retrieval_chain(retriever, question_answer_chain)
 
-# Routes
+# Flask routes
 @app.route("/")
 def index():
     return render_template("chat.html")
