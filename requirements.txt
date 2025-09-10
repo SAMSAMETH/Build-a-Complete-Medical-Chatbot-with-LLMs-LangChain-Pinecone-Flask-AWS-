@@ -4,14 +4,22 @@ wheel>=0.44
 flask==3.1.1
 gunicorn==21.2.0
 python-dotenv==1.1.0
+
+# LangChain ecosystem
 langchain==0.3.26
 langchain-community==0.3.26
 langchain-pinecone==0.2.8
-langchain-openai==0.3.24
+langchain-huggingface==0.1.2   # for HuggingFaceEmbeddings
+
+# Vector DB
+pinecone-client==3.2.2
+
+# Embeddings + Transformers
 sentence-transformers==2.2.2
-huggingface-hub==0.20.3
 transformers==4.37.2
 tokenizers==0.15.2
+huggingface-hub==0.20.3
+
+# PDF parsing (if you add ingestion)
 pypdf==5.6.1
-pinecone-client==3.2.2
 scikit-learn==1.5.2

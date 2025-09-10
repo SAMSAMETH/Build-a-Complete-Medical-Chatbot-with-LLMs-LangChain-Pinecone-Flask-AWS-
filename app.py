@@ -1,42 +1,43 @@
 
 from flask import Flask, render_template, request
-
-from langchain_pinecone.vectorstores import PineconeVectorStore
-
-    # updated import
-
-from langchain_community.chat_models.ollama import ChatOllama
-
-from langchain_community.embeddings import HuggingFaceEmbeddings
-
-  # updated import
+from pinecone import Pinecone
+from langchain_pinecone import PineconeVectorStore
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.llms import Ollama
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 from dotenv import load_dotenv
 import os
 
-# Initialize app
+# Initialize Flask app
 app = Flask(__name__)
 load_dotenv()
+
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 assert PINECONE_API_KEY, "Missing Pinecone API Key"
 
+# Init Pinecone client
+pc = Pinecone(api_key=PINECONE_API_KEY)
+
+# Embeddings
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-MiniLM-L3-v2")
 
+# Connect to existing Pinecone index
 index_name = "medical-chatbot"
 try:
     docsearch = PineconeVectorStore.from_existing_index(
         index_name=index_name,
-        embedding=embeddings,
-        api_key=PINECONE_API_KEY,
+        embedding=embeddings
     )
 except Exception as e:
     raise RuntimeError(f"Error initializing Pinecone index: {e}")
 
+# Retriever
 retriever = docsearch.as_retriever(search_type="similarity", search_kwargs={"k": 3})
 
-chatModel = ChatOllama(model="qwen2:0.5b", temperature=0.7)
+# LLM (Ollama)
+chatModel = Ollama(model="qwen2:0.5b", temperature=0.7)
 system_prompt = "You are a helpful and knowledgeable medical assistant."
 
 prompt = ChatPromptTemplate.from_messages(
@@ -46,9 +47,11 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
+# Chains
 question_answer_chain = create_stuff_documents_chain(chatModel, prompt)
 rag_chain = create_retrieval_chain(retriever, question_answer_chain)
 
+# Routes
 @app.route("/")
 def index():
     return render_template("chat.html")
