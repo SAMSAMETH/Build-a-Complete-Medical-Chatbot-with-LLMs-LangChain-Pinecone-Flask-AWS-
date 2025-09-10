@@ -18,7 +18,7 @@ pinecone-client==3.2.2
 sentence-transformers==2.2.2
 transformers==4.37.2
 tokenizers==0.15.2
-huggingface-hub==0.20.3
+huggingface-hub>=0.23.0   #  upgraded to fix conflict
 
 # PDF parsing (if you add ingestion)
 pypdf==5.6.1
