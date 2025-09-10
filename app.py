@@ -1,8 +1,15 @@
 
 from flask import Flask, render_template, request
-from langchain_pinecone import PineconeVectorStore
-from langchain_community.llms.ollama import ChatOllama        # updated import
-from langchain.embeddings import HuggingFaceEmbeddings  # updated import
+
+from langchain_pinecone.vectorstores import PineconeVectorStore
+
+    # updated import
+
+from langchain_community.chat_models.ollama import ChatOllama
+
+from langchain_community.embeddings import HuggingFaceEmbeddings
+
+  # updated import
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
